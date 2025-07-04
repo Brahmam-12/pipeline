@@ -1,11 +1,11 @@
-name: Build and Run Node App with Docker
+name: Build, Push & Deploy Node App with Docker
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +18,18 @@ jobs:
       - name: Build Docker image
         run: docker build -t myapp .
 
-      - name: Run Docker container
-        run: docker run -d -p 8080:8080 myapp
-
+      # ✅ CD: Deploy to EC2
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/myapp
+            git pull origin main
+            docker stop myapp || true
+            docker rm myapp || true
+            docker rmi myapp || true
+            docker build -t myapp .
+            docker run -d -p 8080:8080 --name myapp myapp

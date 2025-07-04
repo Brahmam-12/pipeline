@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send("Hello world from Docker");
+  res.send("Hello world from Docker CI/CD pipeline!");
 });
 
 app.get('/data', (req, res) => {
