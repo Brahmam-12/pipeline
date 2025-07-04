@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
 
 app.get('/data', (req, res) => {
   res.json({
-    message: "This is a sample API response",
+    message: "This is a sample API response for CI/CD pipeline",
     timestamp: new Date().toISOString()
   });
 });
